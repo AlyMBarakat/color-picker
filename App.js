@@ -1,8 +1,10 @@
-import React from 'react'
+import 'react-native-gesture-handler';
+import React from 'react';
 import { View, Text, SafeAreaView, StyleSheet, FlatList } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native'
 
+// components
 import ColorBox from './components/ColorBox';
-
 
 const COLORS = [
   { colorName: 'Base03', hexCode: '#002b36' },
@@ -25,14 +27,16 @@ const COLORS = [
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <FlatList
-        data={COLORS}
-        keyExtractor={item => item.hexCode}
-        renderItem={({ item }) => <ColorBox colorName={item.colorName} colorHex={item.hexCode} />}
-        ListHeaderComponent={<Text style={styles.font}> Here are some boxes of diffrent colors</Text>}
-      />
-    </SafeAreaView>
+    <NavigationContainer>
+      <SafeAreaView style={styles.safeArea}>
+        <FlatList
+          data={COLORS}
+          keyExtractor={item => item.hexCode}
+          renderItem={({ item }) => <ColorBox colorName={item.colorName} colorHex={item.hexCode} />}
+          ListHeaderComponent={<Text style={styles.font}> Here are some boxes of diffrent colors</Text>}
+        />
+      </SafeAreaView>
+    </NavigationContainer>
   )
 }
 
