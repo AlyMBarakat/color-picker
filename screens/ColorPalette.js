@@ -4,7 +4,7 @@ import ColorBox from '../components/ColorBox';
 
 
 
-const ColorPallete = ({ route }) => {
+const ColorPalette = ({ route }) => {
     const { paletteName, colors } = route.params;
     return (
         <FlatList
@@ -22,6 +22,12 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         marginHorizontal: 20,
         backgroundColor: 'white',
+        // Shadows
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+        elevation: 2,
     },
     font: {
         fontWeight: 'bold',
@@ -29,4 +35,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ColorPallete;
+export default ColorPalette;

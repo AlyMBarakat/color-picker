@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 // screens
 import Home from './screens/Home';
-import ColorPallete from './screens/ColorPallete';
+import ColorPalette from './screens/ColorPalette';
 
 const Stack = createStackNavigator();
 
@@ -15,8 +15,8 @@ const App = () => {
       <Stack.Navigator>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen
-          name="ColorPallete"
-          component={ColorPallete}
+          name="ColorPalette"
+          component={ColorPalette}
           options={({ route }) => ({ title: route.params.paletteName })}
         />
       </Stack.Navigator>
