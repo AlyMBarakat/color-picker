@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import PalletePreview from '../components/PalettePreview';
 
 const SOLARIZED = [
@@ -44,10 +44,33 @@ const COLOR_PALETTES = [
 ];
 
 const Home = ({ navigation }) => {
+	const [currentPalettes, setPalettes] = useState(COLOR_PALETTES);
+	const [isRefreshing, setIsRefreshing] = useState(false);
+
+	const fetchColorPalettes = useCallback(async () => {
+		const result = await fetch('https://color-palette-api.kadikraman.now.sh/palettes');
+		if (result.ok) {
+			const palettes = await result.json();
+			setPalettes(palettes);
+		}
+	}, []);
+
+	const handleRefreshing = useCallback(async () => {
+		setIsRefreshing(true);
+		setTimeout(() => {
+			setIsRefreshing(false);
+		}, 1000);
+		await fetchColorPalettes();
+	}, []);
+
+	useEffect(() => {
+		fetchColorPalettes();
+	}, []);
+
 	return (
 		<FlatList
 			style={styles.list}
-			data={COLOR_PALETTES}
+			data={currentPalettes}
 			keyExtractor={item => item.paletteName}
 			renderItem={({ item }) => (
 				<PalletePreview
@@ -57,6 +80,8 @@ const Home = ({ navigation }) => {
 					colorPalette={item}
 				/>
 			)}
+			refreshing={isRefreshing}
+			onRefresh={handleRefreshing}
 		/>
 	)
 }
