@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import PalletePreview from '../components/PalettePreview';
 
 const SOLARIZED = [
@@ -43,7 +43,8 @@ const COLOR_PALETTES = [
 	{ paletteName: 'Rainbow', colors: RAINBOW },
 ];
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
+	const newColorPalette = route.params ? route.params.newPalette : undefined;
 	const [currentPalettes, setPalettes] = useState(COLOR_PALETTES);
 	const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -67,22 +68,39 @@ const Home = ({ navigation }) => {
 		fetchColorPalettes();
 	}, []);
 
+	useEffect(() => {
+		if (newColorPalette) {
+			setPalettes(current => [newColorPalette, ...current]);
+		}
+	}, [newColorPalette]);
+
 	return (
-		<FlatList
-			style={styles.list}
-			data={currentPalettes}
-			keyExtractor={item => item.paletteName}
-			renderItem={({ item }) => (
-				<PalletePreview
-					handlePress={() => {
-						navigation.navigate('ColorPalette', item);
-					}}
-					colorPalette={item}
-				/>
-			)}
-			refreshing={isRefreshing}
-			onRefresh={handleRefreshing}
-		/>
+		<View style={{ backgroundColor: 'white' }}>
+			<FlatList
+				style={styles.list}
+				data={currentPalettes}
+				keyExtractor={item => item.paletteName}
+				renderItem={({ item }) => (
+					<PalletePreview
+						handlePress={() => {
+							navigation.navigate('ColorPalette', item);
+						}}
+						colorPalette={item}
+					/>
+				)}
+				refreshing={isRefreshing}
+				onRefresh={handleRefreshing}
+				ListHeaderComponent={
+					<TouchableOpacity
+						style={styles.header}
+						onPress={() => {
+							navigation.navigate('ColorPaletteModal');
+						}}>
+						<Text style={styles.headerText}>Add a color scheme</Text>
+					</TouchableOpacity>
+				}
+			/>
+		</View>
 	)
 }
 
@@ -90,7 +108,17 @@ const styles = StyleSheet.create({
 	list: {
 		padding: 10,
 		backgroundColor: 'white',
+		marginBottom: 25,
 	},
+	header: {
+		marginBottom: 15,
+	},
+	headerText: {
+		fontSize: 30,
+		fontWeight: 'bold',
+		color: '#53777A',
+	}
+
 });
 
 export default Home;
