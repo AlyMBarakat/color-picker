@@ -2,36 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useCallback } from 'react/cjs/react.development';
 import ColorSelector from '../components/ColorSelector';
-
-const COLORS = [
-    { colorName: 'AliceBlue', hexCode: '#F0F8FF' },
-    { colorName: 'AntiqueWhite', hexCode: '#FAEBD7' },
-    { colorName: 'Aqua', hexCode: '#00FFFF' },
-    { colorName: 'Aquamarine', hexCode: '#7FFFD4' },
-    { colorName: 'Azure', hexCode: '#F0FFFF' },
-    { colorName: 'Beige', hexCode: '#F5F5DC' },
-    { colorName: 'Bisque', hexCode: '#FFE4C4' },
-    { colorName: 'Black', hexCode: '#000000' },
-    { colorName: 'BlanchedAlmond', hexCode: '#FFEBCD' },
-    { colorName: 'Blue', hexCode: '#0000FF' },
-    { colorName: 'BlueViolet', hexCode: '#8A2BE2' },
-    { colorName: 'Brown', hexCode: '#A52A2A' },
-    { colorName: 'BurlyWood', hexCode: '#DEB887' },
-    { colorName: 'CadetBlue', hexCode: '#5F9EA0' },
-    { colorName: 'Chartreuse', hexCode: '#7FFF00' },
-    { colorName: 'Chocolate', hexCode: '#D2691E' },
-    { colorName: 'Coral', hexCode: '#FF7F50' },
-    { colorName: 'CornflowerBlue', hexCode: '#6495ED' },
-    { colorName: 'Cornsilk', hexCode: '#FFF8DC' },
-    { colorName: 'Crimson', hexCode: '#DC143C' },
-    { colorName: 'Cyan', hexCode: '#00FFFF' },
-    { colorName: 'DarkBlue', hexCode: '#00008B' },
-    { colorName: 'DarkCyan', hexCode: '#008B8B' },
-];
+import { useDispatch } from 'react-redux';
+import { addToColors } from '../slices/colorPalettes';
+import COLORS from '../CONSTANTS';
 
 const ColorPaletteModal = ({ navigation }) => {
     const [name, setName] = useState('');
     const [paletteColors, setPaletteColors] = useState([]);
+    const dispatch = useDispatch();
 
     const handleSubmit = useCallback(() => {
         if (!name) {
@@ -41,6 +19,7 @@ const ColorPaletteModal = ({ navigation }) => {
                 paletteName: name,
                 colors: paletteColors,
             }
+            dispatch(addToColors(newPalette));
             navigation.navigate('Home', { newPalette });
         }
     }, [name, paletteColors]);
